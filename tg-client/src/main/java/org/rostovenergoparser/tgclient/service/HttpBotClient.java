@@ -1,0 +1,121 @@
+package org.rostovenergoparser.tgclient.service;
+
+import com.google.gson.Gson;
+import lombok.extern.slf4j.Slf4j;
+import org.rostovenergoparser.tgclient.dto.send.BotResponseMessageDto;
+import org.rostovenergoparser.tgclient.dto.tgresponse.SendStatusDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+@Slf4j
+@Component
+@PropertySource("classpath:bot.properties")
+public class HttpBotClient {
+
+    private static final String SSL_PROTOCOL = "TLS";
+    private static final String CONTENT_TYPE_HEADER = "Content-Type";
+    private static final String APPLICATION_JSON = "application/json";
+    private static final String SEND_MESSAGE_ENDPOINT = "/sendMessage";
+    private static final String GET_UPDATES_MESSAGE_ENDPOINT = "/getUpdates";
+
+    private final String botBaseUrl;
+    private final HttpClient client;
+    private final Gson gson = new Gson();
+
+    public HttpBotClient(
+            @Value("${bot.url}") String botBaseUrl) {
+        this.botBaseUrl = botBaseUrl;
+        this.client = createHttpClient();
+    }
+
+    public boolean sendMessage(BotResponseMessageDto message) {
+        String jsonMessage = gson.toJson(message);
+        log.info("JsonMessage = {}", jsonMessage);
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(botBaseUrl + SEND_MESSAGE_ENDPOINT))
+                .header(CONTENT_TYPE_HEADER, APPLICATION_JSON)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonMessage))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            log.info("Telegram API response: {}", response.body());
+            var result = gson.fromJson(response.body(), SendStatusDto.class);
+            return result.isOk();
+        } catch (IOException | InterruptedException e) {
+            log.error("Failed to send message to Telegram API", e);
+        }
+        return false;
+    }
+
+    public String getUpdates() {
+        log.info("Sending request to get updates");
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(botBaseUrl + GET_UPDATES_MESSAGE_ENDPOINT))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            log.info("Telegram API response: {}", response.body());
+            return response.body();
+        } catch (IOException | InterruptedException e) {
+            log.error("Failed to get messageUpdates from Telegram API", e);
+        }
+        return null;
+    }
+
+    private HttpClient createHttpClient() {
+        try {
+            SSLContext sslContext = createTrustAllSslContext();
+            return HttpClient.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
+        } catch (RuntimeException e) {
+            log.error("Failed to initialize HTTP client", e);
+        }
+        return null;
+    }
+
+    private SSLContext createTrustAllSslContext() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance(SSL_PROTOCOL);
+            sslContext.init(null, createTrustAllManagers(), new java.security.SecureRandom());
+            return sslContext;
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            log.error("Failed to create SSL context", e);
+            throw new RuntimeException("SSL context initialization failed", e);
+        }
+    }
+
+    private TrustManager[] createTrustAllManagers() {
+        return new TrustManager[]{
+                new X509TrustManager() {
+                    @Override
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[0];
+                    }
+
+                    @Override
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                    }
+
+                    @Override
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) {
+
+                    }
+                }
+        };
+    }
+}

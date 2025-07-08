@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>hello-world-parent</artifactId>
+    <artifactId>power-outage-notifier</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>hello-world-parent</name>
+    <name>power-outage-notifier-parent</name>
 
     <modules>
         <module>tg-client</module>
@@ -29,8 +29,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
 

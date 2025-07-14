@@ -1,4 +1,4 @@
-package org.rostovenergoparser.tgclient.dto.send;
+package org.rostovenergoparser.tgclient.dto.send;  //TODO переименовать
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -17,6 +17,7 @@ public class BotResponseContentDto {
     @SerializedName(value = "reply_markup")
     private InlineKeyboard replyMarkup;
 
+    //TODO вынести в отдельные классы
     @Setter
     @Builder
     public static class InlineKeyboard {

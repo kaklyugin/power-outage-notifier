@@ -2,11 +2,13 @@ package org.rostovenergoparser.tgclient.dto.updates;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import lombok.ToString;
 import org.rostovenergoparser.tgclient.dto.Chat;
 import org.rostovenergoparser.tgclient.dto.From;
 
 
 @Getter
+@ToString
 public abstract class  AbstractUpdateResultDto {
     @SerializedName(value = "update_id")
     private Long updateId;

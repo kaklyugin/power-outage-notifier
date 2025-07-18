@@ -1,4 +1,4 @@
-package org.rostovenergoparser.tgclient.rabbit.service;
+package org.rostovenergoparser.rabbit.producer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RabbitMQProducer {
+public class RabbitMQUpdateProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.tg.message.exchange.name}")
+    @Value("${rabbitmq.updates.exchange.name}")
     private String exchangeName;
 
-    @Value("${rabbitmq.tg.message.update.routing.key}")
+    @Value("${rabbitmq.updates.routing.key}")
     private String routingKey;
 
     public void sendMessage(String message) {

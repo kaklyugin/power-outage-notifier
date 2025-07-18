@@ -1,16 +1,16 @@
 package org.rostovenergoparser.tgclient.dto.updates;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.ToString;
 import org.rostovenergoparser.tgclient.dto.Chat;
 import org.rostovenergoparser.tgclient.dto.From;
 
 
-@Getter
+@Data
 @ToString
-public abstract class  AbstractUpdateResultDto {
-    @SerializedName(value = "update_id")
+public abstract class AbstractUpdateResultDto {
+    @JsonProperty("update_id")
     private Long updateId;
 
     public AbstractUpdateResultDto(Long updateId) {
@@ -19,7 +19,7 @@ public abstract class  AbstractUpdateResultDto {
 
     public abstract String getUserResponse();
 
-    public abstract String getResponseType();
+    public abstract MessageType getResponseType();
 
     public abstract Chat getChat();
 

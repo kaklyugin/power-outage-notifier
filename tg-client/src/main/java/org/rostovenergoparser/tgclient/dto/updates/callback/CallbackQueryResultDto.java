@@ -1,15 +1,16 @@
 package org.rostovenergoparser.tgclient.dto.updates.callback;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import org.rostovenergoparser.tgclient.dto.Chat;
 import org.rostovenergoparser.tgclient.dto.From;
 import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
+import org.rostovenergoparser.tgclient.dto.updates.MessageType;
 
-@Getter
+@Data
 public class CallbackQueryResultDto extends AbstractUpdateResultDto {
 
-    @SerializedName("callback_query")
+    @JsonProperty("callback_query")
     private final CallbackQueryDto callbackQuery;
 
     public CallbackQueryResultDto(Long updateId, CallbackQueryDto callbackQuery) {
@@ -23,8 +24,8 @@ public class CallbackQueryResultDto extends AbstractUpdateResultDto {
     }
 
     @Override
-    public String getResponseType() {
-        return "callback";
+    public MessageType getResponseType() {
+        return MessageType.callback;
     }
 
     @Override

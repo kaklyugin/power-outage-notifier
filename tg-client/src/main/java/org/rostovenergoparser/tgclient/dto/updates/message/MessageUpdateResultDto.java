@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.rostovenergoparser.tgclient.dto.Chat;
 import org.rostovenergoparser.tgclient.dto.From;
 import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
+import org.rostovenergoparser.tgclient.dto.updates.MessageType;
 
 @Getter
 public class MessageUpdateResultDto extends AbstractUpdateResultDto {
@@ -21,8 +22,14 @@ public class MessageUpdateResultDto extends AbstractUpdateResultDto {
     }
 
     @Override
-    public String getResponseType() {
-        return "message";
+    public MessageType getResponseType() {
+        if (this.message.getEntities() == null || this.message.getEntities().isEmpty()) {
+            return MessageType.message;
+        }
+        else if (this.message.getEntities().getFirst().getType().equals(MessageEntityType.bot_command)) {
+            return MessageType.bot_command;
+        }
+        return null;
     }
 
     @Override

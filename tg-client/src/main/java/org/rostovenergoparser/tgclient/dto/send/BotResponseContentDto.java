@@ -1,6 +1,6 @@
 package org.rostovenergoparser.tgclient.dto.send;  //TODO переименовать
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Setter;
 import lombok.Singular;
@@ -14,7 +14,7 @@ public class BotResponseContentDto {
 
     private String text;
 
-    @SerializedName(value = "reply_markup")
+    @JsonProperty("reply_markup")
     private InlineKeyboard replyMarkup;
 
     //TODO вынести в отдельные классы
@@ -22,14 +22,14 @@ public class BotResponseContentDto {
     @Builder
     public static class InlineKeyboard {
         @Singular("keyboardRow")
-        @SerializedName(value = "inline_keyboard")
+        @JsonProperty( "inline_keyboard")
         private List<List<InlineKeyboardButton>> inlineKeyboard;
     }
 
     @Builder
     public static class InlineKeyboardButton {
         private String text;
-        @SerializedName("callback_data")
+        @JsonProperty("callback_data")
         private String callbackData;
     }
 }

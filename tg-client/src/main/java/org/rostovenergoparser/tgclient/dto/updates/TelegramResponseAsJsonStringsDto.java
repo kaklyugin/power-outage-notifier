@@ -1,10 +1,9 @@
 package org.rostovenergoparser.tgclient.dto.updates;
 
 
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.List;
 
@@ -12,7 +11,6 @@ import java.util.List;
 public class TelegramResponseAsJsonStringsDto {
 
     private boolean ok;
-    @SerializedName("result")
-    private List<JsonObject> rawJsonList;
+    private List<AbstractUpdateResultDto> result;
 
 }

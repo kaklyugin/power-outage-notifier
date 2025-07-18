@@ -1,11 +1,12 @@
-package org.rostovenergoparser.tgclient.service;
+package org.rostovenergoparser.tgclient.service.http;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.tgclient.dto.send.BotResponseMessageDto;
 import org.rostovenergoparser.tgclient.dto.tgresponse.SendStatusDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.SSLContext;
@@ -22,7 +23,6 @@ import java.security.cert.X509Certificate;
 
 @Slf4j
 @Component
-@PropertySource("classpath:bot.properties")
 public class HttpBotClient {
 
     private static final String SSL_PROTOCOL = "TLS";
@@ -33,7 +33,9 @@ public class HttpBotClient {
 
     private final String botBaseUrl;
     private final HttpClient client;
-    private final Gson gson = new Gson();
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     public HttpBotClient(
             @Value("${bot.url}") String botBaseUrl) {
@@ -41,8 +43,9 @@ public class HttpBotClient {
         this.client = createHttpClient();
     }
 
+    @SneakyThrows
     public boolean sendMessage(BotResponseMessageDto message) {
-        String jsonMessage = gson.toJson(message);
+        String jsonMessage = objectMapper.writeValueAsString(message);
         log.info("JsonMessage = {}", jsonMessage);
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(botBaseUrl + SEND_MESSAGE_ENDPOINT))
@@ -52,7 +55,7 @@ public class HttpBotClient {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             log.info("Telegram API response: {}", response.body());
-            var result = gson.fromJson(response.body(), SendStatusDto.class);
+            var result = objectMapper.readValue(response.body(),SendStatusDto.class);
             return result.isOk();
         } catch (IOException | InterruptedException e) {
             log.error("Failed to send message to Telegram API", e);

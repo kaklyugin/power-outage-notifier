@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class Chat {
-    private String id;
+    private Long id;
 }

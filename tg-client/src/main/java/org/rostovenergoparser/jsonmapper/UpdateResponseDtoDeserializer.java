@@ -31,21 +31,19 @@ public class UpdateResponseDtoDeserializer extends StdDeserializer<UpdateRespons
         JsonNode node = jp.getCodec().readTree(jp);
         resultUpdateResponseDto.setUpdateId(node.get("update_id").asLong());
 
-        if (node.has("message") && !node.has("entities")) {
+        if (node.has("message") && !node.at("/message").has("entities")) {
+
             resultUpdateResponseDto.setUpdateType(UpdateType.TEXT);
             resultUpdateResponseDto.setFromId(node.at("/message/from/id").asLong());
             resultUpdateResponseDto.setChatId(node.at("/message/chat/id").asLong());
             resultUpdateResponseDto.setDate(node.at("/message/date").asLong());
             resultUpdateResponseDto.setUserResponse(node.at("/message/text").asText());
-        } else if (node.has("callback_query")) {
-            resultUpdateResponseDto.setUpdateType(UpdateType.CALLBACK);
-            resultUpdateResponseDto.setFromId(node.at("/callback_query/message/from/id").asLong());
-            resultUpdateResponseDto.setChatId(node.at("/callback_query/message/chat/id").asLong());
-            resultUpdateResponseDto.setDate(node.at("/callback_query/message/date").asLong());
-            resultUpdateResponseDto.setUserResponse(node.at("/callback_query/data").asText());
-        } else if (node.has("entities")) {
+
+        }
+        else if (node.has("message") && node.at("/message").has("entities")) {
+
             JsonNode entity = StreamSupport
-                    .stream(node.get("entities").spliterator(), false)
+                    .stream(node.at("/message/entities").spliterator(), false)
                     .findFirst()
                     .orElseThrow(() -> new RuntimeException("Entities are empty"));
             if (entity.get("type").asText().equals("bot_command")) {
@@ -54,7 +52,17 @@ public class UpdateResponseDtoDeserializer extends StdDeserializer<UpdateRespons
                 resultUpdateResponseDto.setChatId(node.at("/message/chat/id").asLong());
                 resultUpdateResponseDto.setDate(node.at("/message/date").asLong());
                 resultUpdateResponseDto.setUserResponse(node.at("/message/text").asText());
-            } else
+
+            }
+        else if (node.has("callback_query")) {
+
+            resultUpdateResponseDto.setUpdateType(UpdateType.CALLBACK);
+            resultUpdateResponseDto.setFromId(node.at("/callback_query/message/from/id").asLong());
+            resultUpdateResponseDto.setChatId(node.at("/callback_query/message/chat/id").asLong());
+            resultUpdateResponseDto.setDate(node.at("/callback_query/message/date").asLong());
+            resultUpdateResponseDto.setUserResponse(node.at("/callback_query/data").asText());
+
+        }  else
                 throw new JsonParseException("Cannot define update type");
         }
         return resultUpdateResponseDto;

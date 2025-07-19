@@ -46,7 +46,6 @@ public class DialogStateMachine {
                 handler.handleUpdate(update);
                 this.context.setDialogStatus(DialogStatus.STOPPED);
             }
-            default -> throw new RuntimeException("Unhandled command: " + update.getUserResponse());
         }
     }
 

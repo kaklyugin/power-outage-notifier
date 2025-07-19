@@ -54,12 +54,12 @@ public class DialogStateMachine {
         switch (this.getContext().getDialogStatus()) {
             case WAITING_FOR_CITY_INPUT -> {
                 var handler = new CitySelectUpdateHandler();
-               // this.context.getUserReplies().setCity(handler.handleUpdate(update));
+                this.context.getUserResponseCart().setCity(handler.handleUpdate(update));
                 this.context.setDialogStatus(DialogStatus.WAITING_FOR_STREET_INPUT);
             }
             case WAITING_FOR_STREET_INPUT -> {
                 var handler = new StreetInputUpdateHandler();
-              //  this.context.getUserReplies().setStreet(handler.handleUpdate(update));
+                this.context.getUserResponseCart().setStreet(handler.handleUpdate(update));
                 this.context.setDialogStatus(DialogStatus.DONE);
             }
         }

@@ -8,6 +8,6 @@ import org.rostovenergoparser.dto.UpdateDto;
 public class DialogStateMachineContext {
     private Long chatId;
     private DialogStatus dialogStatus;
-    private UserReply userReply;
+    private UserResponseCart userResponseCart;
     private UpdateDto lastUpdate;
 }

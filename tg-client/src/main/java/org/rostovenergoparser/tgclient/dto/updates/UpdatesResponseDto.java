@@ -9,6 +9,6 @@ import java.util.List;
 public class UpdatesResponseDto {
 
     private boolean ok;
-    private List<UpdateDto> result;
+    private List<UpdateResponseDto> result;
 
 }

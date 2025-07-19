@@ -7,16 +7,17 @@ import org.rostovenergoparser.bot.dialogstatemachine.handlers.CitySelectUpdateHa
 import org.rostovenergoparser.bot.dialogstatemachine.handlers.StartMessageHandler;
 import org.rostovenergoparser.bot.dialogstatemachine.handlers.StopMessageHandler;
 import org.rostovenergoparser.bot.dialogstatemachine.handlers.StreetInputUpdateHandler;
-import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
+import org.rostovenergoparser.dto.UpdateDto;
+import org.rostovenergoparser.tgclient.dto.updates.UpdateType;
 
 public class DialogStateMachine {
 
     @Getter
     private final DialogStateMachineContext context;
 
-    public DialogStateMachine(AbstractUpdateResultDto update) {
+    public DialogStateMachine(UpdateDto update) {
         this.context = new DialogStateMachineContext();
-        this.context.setChatId(update.getChat().getId());
+        this.context.setChatId(update.getChatId());
         this.context.setDialogStatus(DialogStatus.NEW);
         this.context.setLastUpdate(update);
     }
@@ -25,15 +26,15 @@ public class DialogStateMachine {
         this.context = context;
     }
 
-    public void handle(AbstractUpdateResultDto update) {
-        switch (update.getResponseType()) {
-            case bot_command -> handleUserCommand(update);
-            case callback, message -> handleUserResponse(update);
-            default -> throw new RuntimeException("Unhandled response type: " + update.getResponseType());
+    public void handle(UpdateDto update) {
+        switch (update.getUpdateType()) {
+            case UpdateType.COMMAND -> handleCommand(update);
+            case UpdateType.TEXT, UpdateType.CALLBACK -> handleReply(update);
+            default -> throw new RuntimeException("Unhandled response type: " + update.getUpdateType());
         }
     }
 
-    private void handleUserCommand(AbstractUpdateResultDto update) {
+    private void handleCommand(UpdateDto update) {
         switch (update.getUserResponse()) {
             case "/start" -> {
                 var handler = new StartMessageHandler();
@@ -49,7 +50,7 @@ public class DialogStateMachine {
         }
     }
 
-    private void handleUserResponse(AbstractUpdateResultDto update) {
+    private void handleReply(UpdateDto update) {
         switch (this.getContext().getDialogStatus()) {
             case WAITING_FOR_CITY_INPUT -> {
                 var handler = new CitySelectUpdateHandler();

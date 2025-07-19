@@ -1,12 +1,11 @@
-package org.rostovenergoparser.tgclient.dto.updates;
+package org.rostovenergoparser.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.rostovenergoparser.tgclient.dto.updates.UpdateType;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateDto {
@@ -15,5 +14,5 @@ public class UpdateDto {
     private long fromId;
     private long chatId;
     private long date;
-    private String userReply;
+    private String userResponse;
 }

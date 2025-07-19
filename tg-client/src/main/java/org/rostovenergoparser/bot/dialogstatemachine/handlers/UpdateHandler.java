@@ -1,7 +1,7 @@
 package org.rostovenergoparser.bot.dialogstatemachine.handlers;
 
-import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
+import org.rostovenergoparser.dto.UpdateDto;
 
 public interface UpdateHandler {
-    String handleUpdate(AbstractUpdateResultDto message);
+    String handleUpdate(UpdateDto message);
 }

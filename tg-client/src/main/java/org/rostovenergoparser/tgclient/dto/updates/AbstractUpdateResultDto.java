@@ -8,7 +8,6 @@ import org.rostovenergoparser.tgclient.dto.From;
 
 
 @Data
-@ToString
 public abstract class AbstractUpdateResultDto {
     @JsonProperty("update_id")
     private Long updateId;
@@ -23,5 +22,4 @@ public abstract class AbstractUpdateResultDto {
 
     public abstract Chat getChat();
 
-    public abstract From getForm();
 }

@@ -1,6 +1,7 @@
 package org.rostovenergoparser.tgclient.dto.updates.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,19 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Getter
-@ToString
-@NoArgsConstructor
+@Data
 public class MessageUpdateDto {
     @JsonProperty("message_id")
     private Integer messageId;
     private String text;
     private From from;
     private Chat chat;
-    private List<CommandEntity> entities = new ArrayList<>();
-
-    public MessageUpdateDto(Integer messageId) {
-        this.messageId = messageId;
-    }
-
+    private final List<CommandEntity> entities = new ArrayList<>();
 }

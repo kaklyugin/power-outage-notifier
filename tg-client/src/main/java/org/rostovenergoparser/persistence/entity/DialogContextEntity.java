@@ -15,7 +15,7 @@ import org.rostovenergoparser.bot.dialogstatemachine.dto.DialogStateMachineConte
 public class DialogContextEntity {
 
     @Id
-    @Column(name = "id", nullable = false,unique = true)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
     @JdbcTypeCode(SqlTypes.JSON)

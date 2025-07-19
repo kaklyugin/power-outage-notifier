@@ -3,8 +3,8 @@ package org.rostovenergoparser.tgclient.service.http;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.rostovenergoparser.tgclient.dto.send.BotResponseMessageDto;
-import org.rostovenergoparser.tgclient.dto.tgresponse.SendStatusDto;
+import org.rostovenergoparser.tgclient.dto.message.request.MessageDto;
+import org.rostovenergoparser.tgclient.dto.message.response.SendStatusDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class HttpBotClient {
     }
 
     @SneakyThrows
-    public boolean sendMessage(BotResponseMessageDto message) {
+    public boolean sendMessage(MessageDto message) {
         String jsonMessage = objectMapper.writeValueAsString(message);
         log.info("JsonMessage = {}", jsonMessage);
         var request = HttpRequest.newBuilder()
@@ -55,7 +55,7 @@ public class HttpBotClient {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             log.info("Telegram API response: {}", response.body());
-            var result = objectMapper.readValue(response.body(),SendStatusDto.class);
+            var result = objectMapper.readValue(response.body(), SendStatusDto.class);
             return result.isOk();
         } catch (IOException | InterruptedException e) {
             log.error("Failed to send message to Telegram API", e);

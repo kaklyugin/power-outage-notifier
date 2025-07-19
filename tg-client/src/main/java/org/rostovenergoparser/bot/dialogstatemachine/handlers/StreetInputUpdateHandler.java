@@ -7,8 +7,8 @@ import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
 public class StreetInputUpdateHandler implements UpdateHandler {
     @Override
     public String handleUpdate(AbstractUpdateResultDto message) {
-        log.info("Handling message = {}",message);
-        log.info("User has input street = {}",message.getUserResponse());
+        log.info("Handling message = {}", message);
+        log.info("User has input street = {}", message.getUserResponse());
         return message.getUserResponse();
     }
 }

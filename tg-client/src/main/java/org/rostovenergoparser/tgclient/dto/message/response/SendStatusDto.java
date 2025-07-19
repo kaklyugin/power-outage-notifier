@@ -1,4 +1,4 @@
-package org.rostovenergoparser.tgclient.dto.tgresponse;
+package org.rostovenergoparser.tgclient.dto.message.response;
 
 import lombok.Getter;
 

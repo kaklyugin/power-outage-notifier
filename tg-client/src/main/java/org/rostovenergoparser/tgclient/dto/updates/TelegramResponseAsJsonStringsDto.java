@@ -1,8 +1,6 @@
 package org.rostovenergoparser.tgclient.dto.updates;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Getter;
 
 import java.util.List;

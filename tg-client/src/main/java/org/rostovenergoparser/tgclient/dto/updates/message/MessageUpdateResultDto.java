@@ -1,12 +1,13 @@
 package org.rostovenergoparser.tgclient.dto.updates.message;
 
+import lombok.Data;
 import lombok.Getter;
 import org.rostovenergoparser.tgclient.dto.Chat;
 import org.rostovenergoparser.tgclient.dto.From;
 import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
 import org.rostovenergoparser.tgclient.dto.updates.MessageType;
 
-@Getter
+@Data
 public class MessageUpdateResultDto extends AbstractUpdateResultDto {
 
     private final MessageUpdateDto message;
@@ -25,8 +26,7 @@ public class MessageUpdateResultDto extends AbstractUpdateResultDto {
     public MessageType getResponseType() {
         if (this.message.getEntities() == null || this.message.getEntities().isEmpty()) {
             return MessageType.message;
-        }
-        else if (this.message.getEntities().getFirst().getType().equals(MessageEntityType.bot_command)) {
+        } else if (this.message.getEntities().getFirst().getType().equals(MessageEntityType.bot_command)) {
             return MessageType.bot_command;
         }
         return null;
@@ -35,10 +35,5 @@ public class MessageUpdateResultDto extends AbstractUpdateResultDto {
     @Override
     public Chat getChat() {
         return message.getChat();
-    }
-
-    @Override
-    public From getForm() {
-        return message.getFrom();
     }
 }

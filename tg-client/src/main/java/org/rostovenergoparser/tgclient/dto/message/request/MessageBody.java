@@ -1,4 +1,4 @@
-package org.rostovenergoparser.tgclient.dto.send;  //TODO переименовать
+package org.rostovenergoparser.tgclient.dto.message.request;  //TODO переименовать
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Setter
 @SuperBuilder(toBuilder = true)
-public class BotResponseContentDto {
+public class MessageBody {
 
     private String text;
 
@@ -22,7 +22,7 @@ public class BotResponseContentDto {
     @Builder
     public static class InlineKeyboard {
         @Singular("keyboardRow")
-        @JsonProperty( "inline_keyboard")
+        @JsonProperty("inline_keyboard")
         private List<List<InlineKeyboardButton>> inlineKeyboard;
     }
 

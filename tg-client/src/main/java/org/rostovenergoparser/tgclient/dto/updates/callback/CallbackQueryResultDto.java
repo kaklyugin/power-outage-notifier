@@ -33,8 +33,4 @@ public class CallbackQueryResultDto extends AbstractUpdateResultDto {
         return callbackQuery.getChat();
     }
 
-    @Override
-    public From getForm() {
-        return callbackQuery.getFrom();
-    }
 }

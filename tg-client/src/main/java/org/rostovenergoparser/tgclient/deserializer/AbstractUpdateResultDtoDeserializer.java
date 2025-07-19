@@ -1,7 +1,6 @@
 package org.rostovenergoparser.tgclient.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
@@ -14,19 +13,19 @@ import org.rostovenergoparser.tgclient.dto.updates.message.MessageUpdateResultDt
 import java.io.IOException;
 
 
-public class JacksonUpdateResultAdapter extends StdDeserializer<AbstractUpdateResultDto> {
+public class AbstractUpdateResultDtoDeserializer extends StdDeserializer<AbstractUpdateResultDto> {
 
-    public JacksonUpdateResultAdapter() {
+    public AbstractUpdateResultDtoDeserializer() {
         this(null);
     }
 
-    public JacksonUpdateResultAdapter(Class<?> vc) {
+    public AbstractUpdateResultDtoDeserializer(Class<?> vc) {
         super(vc);
     }
 
     @Override
     public AbstractUpdateResultDto deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException, JsonProcessingException {
+            throws IOException {
 
         JsonNode node = jp.getCodec().readTree(jp);
         long updateId = node.get("update_id").asLong();

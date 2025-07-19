@@ -8,6 +8,6 @@ import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
 public class DialogStateMachineContext {
     private Long chatId;
     private DialogStatus dialogStatus;
-    private UserReplies userReplies;
+    //private UserReplies userReplies;
     private AbstractUpdateResultDto lastUpdate;
 }

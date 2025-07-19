@@ -17,8 +17,8 @@ public class JacksonConfig {
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
-        module.addDeserializer(AbstractUpdateResultDto.class, new JacksonUpdateResultAdapter());
-
+        module.addDeserializer(AbstractUpdateResultDto.class, new AbstractUpdateResultDtoDeserializer())
+                .addSerializer(AbstractUpdateResultDto.class, new AbstractUpdateResultDtoSerializer());
         mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"))
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 .registerModule(module);

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 //TODO Обсудить с Сашей - попробовал сделать через интерфейс и посыпались ошибки
-public class UpdatesPollingService  {
+public class UpdatesPollingService {
 
     private final HttpBotClient httpBotClient;
     private final JacksonConfig jacksonConfig;
@@ -45,12 +45,12 @@ public class UpdatesPollingService  {
             throw new RuntimeException("No updates found." + rawJsonUpdates);
         }
         updates.getResult().forEach(update ->
-            {
-                if (!chatStore.checkUpdateExists(update.getChat().getId(), update.getUpdateId())) {
-                    chatStore.pushUpdate(update.getChat().getId(), update.getUpdateId(), update);
-                    publishUpdateForProcessing(update);
+                {
+                    if (!chatStore.checkUpdateExists(update.getChat().getId(), update.getUpdateId())) {
+                        chatStore.pushUpdate(update.getChat().getId(), update.getUpdateId(), update);
+                        publishUpdateForProcessing(update);
+                    }
                 }
-            }
         );
     }
 

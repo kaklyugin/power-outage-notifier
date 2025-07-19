@@ -7,7 +7,7 @@ import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
 public class StopMessageHandler implements UpdateHandler {
     @Override
     public String handleUpdate(AbstractUpdateResultDto message) {
-        log.info("Handling message = {}",message);
+        log.info("Handling message = {}", message);
         return message.getUserResponse();
     }
 }

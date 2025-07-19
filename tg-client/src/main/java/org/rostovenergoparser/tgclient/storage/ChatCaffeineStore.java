@@ -14,6 +14,7 @@ public class ChatCaffeineStore implements ChatStore {
     private final Cache<Long, HashMap<Long, AbstractUpdateResultDto>> cache = Caffeine.newBuilder()
             .expireAfterWrite(36, TimeUnit.HOURS)
             .build();
+
     //TODO Можно упростить - хранить id последнего сообщения
     @Override
     public void pushUpdate(Long chatId, Long updateId, AbstractUpdateResultDto message) {
@@ -26,7 +27,7 @@ public class ChatCaffeineStore implements ChatStore {
 
     @Override
     public boolean checkUpdateExists(Long chatId, Long updateId) {
-        HashMap<Long,AbstractUpdateResultDto> updates =  cache.get(chatId, upd ->null);
+        HashMap<Long, AbstractUpdateResultDto> updates = cache.get(chatId, upd -> null);
         return updates != null && updates.containsKey(updateId);
 
     }

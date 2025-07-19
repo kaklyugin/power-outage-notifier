@@ -9,7 +9,7 @@ import org.rostovenergoparser.tgclient.dto.updates.message.MessageUpdateResultDt
 
 import java.io.IOException;
 
-public class AbstractUpdateResultDtoSerializer extends JsonSerializer<AbstractUpdateResultDto> {
+public class UpdateDtoSerializer extends JsonSerializer<AbstractUpdateResultDto> {
 
     @Override
     public void serialize(AbstractUpdateResultDto value, JsonGenerator gen, SerializerProvider serializers)

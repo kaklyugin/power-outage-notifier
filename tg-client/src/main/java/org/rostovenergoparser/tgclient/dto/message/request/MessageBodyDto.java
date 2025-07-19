@@ -10,7 +10,7 @@ import java.util.List;
 
 @Setter
 @SuperBuilder(toBuilder = true)
-public class MessageBody {
+public class MessageBodyDto {
 
     private String text;
 

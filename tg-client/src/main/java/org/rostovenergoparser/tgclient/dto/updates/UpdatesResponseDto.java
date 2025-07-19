@@ -6,9 +6,9 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class TelegramResponseAsJsonStringsDto {
+public class UpdatesResponseDto {
 
     private boolean ok;
-    private List<AbstractUpdateResultDto> result;
+    private List<UpdateDto> result;
 
 }

@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Setter;
 
 @Setter
-public class MessageDto extends MessageBody {
+public class MessageDto extends MessageBodyDto {
 
     @JsonProperty("chat_id")
     private String chatId;
 
-    public MessageDto(String chatId, MessageBody body) {
+    public MessageDto(String chatId, MessageBodyDto body) {
         super(body.toBuilder());
         this.chatId = chatId;
     }

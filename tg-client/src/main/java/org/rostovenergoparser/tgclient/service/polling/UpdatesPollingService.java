@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.rabbit.producer.RabbitMQUpdateProducer;
 import org.rostovenergoparser.tgclient.deserializer.JacksonConfig;
 import org.rostovenergoparser.tgclient.dto.updates.AbstractUpdateResultDto;
-import org.rostovenergoparser.tgclient.dto.updates.TelegramResponseAsJsonStringsDto;
+import org.rostovenergoparser.tgclient.dto.updates.UpdatesResponseDto;
 import org.rostovenergoparser.tgclient.service.http.HttpBotClient;
 import org.rostovenergoparser.tgclient.storage.ChatStore;
 import org.springframework.scheduling.annotation.Async;
@@ -40,7 +40,7 @@ public class UpdatesPollingService {
         log.info("Polling");
         String rawJsonUpdates = httpBotClient.getUpdates();
         log.info("Updates received from tg =  {}", rawJsonUpdates);
-        TelegramResponseAsJsonStringsDto updates = objectMapper.readValue(rawJsonUpdates, TelegramResponseAsJsonStringsDto.class);
+        UpdatesResponseDto updates = objectMapper.readValue(rawJsonUpdates, UpdatesResponseDto.class);
         if (!updates.isOk()) {
             throw new RuntimeException("No updates found." + rawJsonUpdates);
         }

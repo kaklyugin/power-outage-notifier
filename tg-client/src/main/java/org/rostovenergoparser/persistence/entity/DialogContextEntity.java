@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.rostovenergoparser.bot.dialogstatemachine.dto.DialogStateMachineContext;
+import org.rostovenergoparser.dialogstatemachine.dto.DialogStateMachineContext;
 
 @Entity
 @Data

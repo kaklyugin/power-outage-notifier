@@ -1,12 +1,12 @@
-package org.rostovenergoparser.bot.dialogstatemachine;
+package org.rostovenergoparser.dialogstatemachine;
 
 import lombok.Getter;
-import org.rostovenergoparser.bot.dialogstatemachine.dto.DialogStateMachineContext;
-import org.rostovenergoparser.bot.dialogstatemachine.enums.DialogStatus;
-import org.rostovenergoparser.bot.dialogstatemachine.handlers.CitySelectUpdateHandler;
-import org.rostovenergoparser.bot.dialogstatemachine.handlers.StartMessageHandler;
-import org.rostovenergoparser.bot.dialogstatemachine.handlers.StopMessageHandler;
-import org.rostovenergoparser.bot.dialogstatemachine.handlers.StreetInputUpdateHandler;
+import org.rostovenergoparser.dialogstatemachine.dto.DialogStateMachineContext;
+import org.rostovenergoparser.dialogstatemachine.enums.DialogStatus;
+import org.rostovenergoparser.dialogstatemachine.handlers.CitySelectUpdateHandler;
+import org.rostovenergoparser.dialogstatemachine.handlers.StartMessageHandler;
+import org.rostovenergoparser.dialogstatemachine.handlers.StopMessageHandler;
+import org.rostovenergoparser.dialogstatemachine.handlers.StreetInputUpdateHandler;
 import org.rostovenergoparser.dto.UpdateDto;
 import org.rostovenergoparser.tgclient.dto.updates.UpdateType;
 

@@ -1,4 +1,4 @@
-package org.rostovenergoparser.bot.dialogstatemachine.handlers;
+package org.rostovenergoparser.dialogstatemachine.handlers;
 
 import org.rostovenergoparser.dto.UpdateDto;
 

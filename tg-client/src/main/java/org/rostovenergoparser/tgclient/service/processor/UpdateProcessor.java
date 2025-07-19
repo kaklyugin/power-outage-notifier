@@ -3,7 +3,7 @@ package org.rostovenergoparser.tgclient.service.processor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.rostovenergoparser.bot.dialogstatemachine.DialogStateMachine;
+import org.rostovenergoparser.dialogstatemachine.DialogStateMachine;
 import org.rostovenergoparser.dto.UpdateDto;
 import org.rostovenergoparser.persistence.entity.DialogContextEntity;
 import org.rostovenergoparser.persistence.repository.DialogContextRepository;

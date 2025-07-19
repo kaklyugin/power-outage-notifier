@@ -1,7 +1,7 @@
-package org.rostovenergoparser.bot.dialogstatemachine.dto;
+package org.rostovenergoparser.dialogstatemachine.dto;
 
 import lombok.Data;
-import org.rostovenergoparser.bot.dialogstatemachine.enums.DialogStatus;
+import org.rostovenergoparser.dialogstatemachine.enums.DialogStatus;
 import org.rostovenergoparser.dto.UpdateDto;
 
 @Data

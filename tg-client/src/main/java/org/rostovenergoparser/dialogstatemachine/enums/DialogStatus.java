@@ -1,4 +1,4 @@
-package org.rostovenergoparser.bot.dialogstatemachine.enums;
+package org.rostovenergoparser.dialogstatemachine.enums;
 
 public enum DialogStatus {
     NEW,

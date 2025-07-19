@@ -1,4 +1,4 @@
-package org.rostovenergoparser.bot.dialogstatemachine.handlers;
+package org.rostovenergoparser.dialogstatemachine.handlers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.dto.UpdateDto;

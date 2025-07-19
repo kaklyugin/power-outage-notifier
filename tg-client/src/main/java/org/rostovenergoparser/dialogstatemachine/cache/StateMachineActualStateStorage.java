@@ -1,6 +1,6 @@
-package org.rostovenergoparser.bot.dialogstatemachine.cache;
+package org.rostovenergoparser.dialogstatemachine.cache;
 
-import org.rostovenergoparser.bot.dialogstatemachine.dto.DialogStateMachineContext;
+import org.rostovenergoparser.dialogstatemachine.dto.DialogStateMachineContext;
 
 import javax.swing.plaf.nimbus.State;
 

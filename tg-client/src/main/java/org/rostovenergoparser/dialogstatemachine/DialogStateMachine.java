@@ -29,7 +29,8 @@ public class DialogStateMachine {
     public void handle(UpdateDto update) {
         switch (update.getUpdateType()) {
             case UpdateType.COMMAND -> handleCommand(update);
-            case UpdateType.TEXT, UpdateType.CALLBACK -> handleReply(update);
+            case UpdateType.TEXT ->  handleReply(update);
+            case UpdateType.CALLBACK -> handleReply(update);
             default -> throw new RuntimeException("Unhandled response type: " + update.getUpdateType());
         }
     }

@@ -62,6 +62,7 @@ public class UpdateResponseDtoDeserializer extends StdDeserializer<UpdateRespons
             resultUpdateResponseDto.setDate(node.at("/callback_query/message/date").asLong());
             resultUpdateResponseDto.setUserResponse(node.at("/callback_query/data").asText());
             resultUpdateResponseDto.setSourceMessageId(node.at("/callback_query/message/message_id").asLong());
+            resultUpdateResponseDto.setCallbackQueryId(node.at("/callback_query/id").asText());
 
         }  else
                 throw new JsonParseException("Cannot define update type");

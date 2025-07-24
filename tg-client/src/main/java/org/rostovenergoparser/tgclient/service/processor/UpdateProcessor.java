@@ -6,8 +6,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.dialogstatemachine.DialogStateMachine;
 import org.rostovenergoparser.dto.UpdateDto;
-import org.rostovenergoparser.persistence.entity.DialogContextEntity;
-import org.rostovenergoparser.persistence.repository.DialogContextRepository;
+import org.rostovenergoparser.persistence.entity.ChatEntity;
+import org.rostovenergoparser.persistence.repository.ChatRepository;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class UpdateProcessor {
-    private final DialogContextRepository dialogContextRepository;
+    private final ChatRepository chatRepository;
     private final ObjectMapper objectMapper;
 
-    public UpdateProcessor(DialogContextRepository dialogContextRepository, ObjectMapper objectMapper) {
-        this.dialogContextRepository = dialogContextRepository;
+    public UpdateProcessor(ChatRepository chatRepository, ObjectMapper objectMapper) {
+        this.chatRepository = chatRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -30,14 +30,14 @@ public class UpdateProcessor {
                               @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag)  {
         try {
             var update = objectMapper.readValue(message, UpdateDto.class);
-            DialogContextEntity contextEntity = dialogContextRepository.findById(update.getChatId())
-                    .orElse(new DialogContextEntity());
+            ChatEntity contextEntity = chatRepository.findById(update.getChatId())
+                    .orElse(new ChatEntity());
             DialogStateMachine dialogStateMachine = (contextEntity.getId() == null)  ?
                     new DialogStateMachine(update): new DialogStateMachine(contextEntity.getContext());
             dialogStateMachine.handle(update);
             contextEntity.setId(dialogStateMachine.getContext().getChatId());
             contextEntity.setContext(dialogStateMachine.getContext());
-            dialogContextRepository.save(contextEntity);
+            chatRepository.save(contextEntity);
             channel.basicAck(deliveryTag, false);
 
         }

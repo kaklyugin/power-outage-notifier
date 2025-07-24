@@ -18,6 +18,8 @@ public class CitySelectUpdateHandler implements UpdateHandler {
         BotClient botClient = context.getBean(BotClient.class);
 
         dialogStateMachine.getContext().addUserCallbackAnswer(update.getSourceMessageId(), update.getUserResponse());
+        botClient.answerCallbackQuery(update.getCallbackQueryId());
+
         MessageDto cityInputQuestionMessage = MessageDto.builder()
                                                         .chatId(String.valueOf(update.getChatId()))
                                                         .text("Введите улицу")

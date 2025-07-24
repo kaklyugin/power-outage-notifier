@@ -1,9 +1,6 @@
 package org.rostovenergoparser.persistence.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -11,11 +8,12 @@ import org.rostovenergoparser.dialogstatemachine.dto.DialogStateMachineContext;
 
 @Entity
 @Data
-@Table(name = "dialog_context")
-public class DialogContextEntity {
+@Table(name = "chat")
+public class ChatEntity {
 
     @Id
-    @Column(name = "id", nullable = false, unique = true)
+    @Column(name = "chat_id", nullable = false, unique = true)
+    @OneToMany(mappedBy = "chatEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Long id;
 
     @JdbcTypeCode(SqlTypes.JSON)

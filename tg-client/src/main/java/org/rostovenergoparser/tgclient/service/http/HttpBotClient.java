@@ -3,6 +3,7 @@ package org.rostovenergoparser.tgclient.service.http;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.rostovenergoparser.tgclient.dto.message.callbackanswer.CallbackAnswerDto;
 import org.rostovenergoparser.tgclient.dto.message.request.MessageDto;
 import org.rostovenergoparser.tgclient.dto.message.response.SendMessageResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class HttpBotClient implements BotClient{
     private static final String APPLICATION_JSON = "application/json";
     private static final String SEND_MESSAGE_ENDPOINT = "/sendMessage";
     private static final String GET_UPDATES_MESSAGE_ENDPOINT = "/getUpdates";
+    private static final String ANSWER_CALLBACK_QUERY = "/answerCallbackQuery";
 
     private final String botBaseUrl;
     private final HttpClient client;
@@ -91,6 +93,29 @@ public class HttpBotClient implements BotClient{
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             log.info("Received update. Body = {}", response.body());
+        } catch (IOException | InterruptedException e) {
+            log.error("Failed to get bot message updates from Telegram", e);
+        }
+    }
+
+    @SneakyThrows
+    public void answerCallbackQuery(String callbackQueryId) {
+        log.info("Answer callback query {}", callbackQueryId);
+        CallbackAnswerDto callbackAnswerDto = CallbackAnswerDto.builder()
+                .callbackQueryId(callbackQueryId)
+                .text("Обработка ответа")
+                .showAlert(true)
+                .build();
+
+        String jsonMessage = objectMapper.writeValueAsString(callbackAnswerDto);
+
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(botBaseUrl + ANSWER_CALLBACK_QUERY))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonMessage))
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            log.info("Received answer callback response. Body = {}", response.body());
         } catch (IOException | InterruptedException e) {
             log.error("Failed to get bot message updates from Telegram", e);
         }

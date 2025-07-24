@@ -15,6 +15,7 @@ import org.rostovenergoparser.jsonmapper.UpdateResponseDtoDeserializer;
 public class UpdateResponseDto {
     private long updateId;
     private UpdateType updateType;
+    private String callbackQueryId;
     private long fromId;
     private long chatId;
     private long date;

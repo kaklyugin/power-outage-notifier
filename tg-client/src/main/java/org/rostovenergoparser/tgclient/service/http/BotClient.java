@@ -6,4 +6,5 @@ import org.rostovenergoparser.tgclient.dto.message.response.SendMessageResponseD
 public interface BotClient {
     SendMessageResponseDto sendMessage(MessageDto message);
     String getUpdates();
+    void answerCallbackQuery(String callbackQueryId);
 }

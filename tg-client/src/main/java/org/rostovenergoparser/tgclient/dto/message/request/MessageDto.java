@@ -1,16 +1,19 @@
-package org.rostovenergoparser.tgclient.dto.message.request;
+package org.rostovenergoparser.tgclient.dto.message.request;  //TODO переименовать
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Setter;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
+import org.rostovenergoparser.tgclient.dto.message.request.keyboard.InlineKeyboardDto;
 
-@Setter
-public class MessageDto extends MessageBodyDto {
+@Data
+@SuperBuilder(toBuilder = true)
+public class MessageDto {
 
     @JsonProperty("chat_id")
     private String chatId;
 
-    public MessageDto(String chatId, MessageBodyDto body) {
-        super(body.toBuilder());
-        this.chatId = chatId;
-    }
+    private String text;
+
+    @JsonProperty("reply_markup")
+    private InlineKeyboardDto replyMarkup;
 }

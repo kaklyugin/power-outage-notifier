@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.dto.UpdateDto;
 import org.rostovenergoparser.mapper.UpdateResponseMapper;
 import org.rostovenergoparser.rabbit.producer.RabbitMQUpdateProducer;
+import org.rostovenergoparser.tgclient.dto.updates.UpdateResponseDto;
 import org.rostovenergoparser.tgclient.dto.updates.UpdatesResponseDto;
 import org.rostovenergoparser.tgclient.service.http.HttpBotClient;
 import org.rostovenergoparser.tgclient.storage.ChatStore;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -51,14 +54,26 @@ public class UpdatesPollingService {
             throw new RuntimeException("No updates found." + json);
         }
         updates.getResult().forEach(responseDto ->
-            {
-                if (!chatStore.checkUpdateExists(responseDto.getChatId(), responseDto.getUpdateId())) {
-                    chatStore.pushUpdate(responseDto.getChatId(), responseDto.getUpdateId(), responseDto);
-                    UpdateDto updateDto = mapper.mapUpdateResponseToUpdateDto(responseDto);
-                    publishUpdateForProcessing(updateDto);
+                {
+                    if (!chatStore.checkUpdateExists(responseDto.getChatId(), responseDto.getUpdateId())) {
+                        chatStore.pushUpdate(responseDto.getChatId(), responseDto.getUpdateId(), responseDto);
+                        UpdateDto updateDto = mapper.mapUpdateResponseToUpdateDto(responseDto);
+                        publishUpdateForProcessing(updateDto);
+                    }
                 }
-            }
         );
+        // Чистим апдейты на сервере TG
+        Optional<Long> maxUpdatedId = updates.getResult().stream()
+                .map(UpdateResponseDto::getUpdateId)
+                .max(Long::compareTo);
+
+        if (maxUpdatedId.isPresent()) {
+            log.info("Max updated id is {}", maxUpdatedId.get());
+            httpBotClient.clearUpdates(maxUpdatedId.get());
+        } else {
+            log.info("No updates found");
+        }
+
     }
 
     public void publishUpdateForProcessing(UpdateDto update) {

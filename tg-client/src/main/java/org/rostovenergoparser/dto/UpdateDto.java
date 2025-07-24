@@ -15,4 +15,5 @@ public class UpdateDto {
     private long chatId;
     private long date;
     private String userResponse;
+    private long sourceMessageId;
 }

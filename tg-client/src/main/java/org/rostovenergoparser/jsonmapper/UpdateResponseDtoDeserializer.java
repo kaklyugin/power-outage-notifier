@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import org.rostovenergoparser.tgclient.dto.updates.UpdateResponseDto;
 import org.rostovenergoparser.tgclient.dto.updates.UpdateType;
 
-
 import java.io.IOException;
 import java.util.stream.StreamSupport;
 
@@ -54,6 +53,7 @@ public class UpdateResponseDtoDeserializer extends StdDeserializer<UpdateRespons
                 resultUpdateResponseDto.setUserResponse(node.at("/message/text").asText());
 
             }
+        }
         else if (node.has("callback_query")) {
 
             resultUpdateResponseDto.setUpdateType(UpdateType.CALLBACK);
@@ -61,10 +61,10 @@ public class UpdateResponseDtoDeserializer extends StdDeserializer<UpdateRespons
             resultUpdateResponseDto.setChatId(node.at("/callback_query/message/chat/id").asLong());
             resultUpdateResponseDto.setDate(node.at("/callback_query/message/date").asLong());
             resultUpdateResponseDto.setUserResponse(node.at("/callback_query/data").asText());
+            resultUpdateResponseDto.setSourceMessageId(node.at("/callback_query/message/message_id").asLong());
 
         }  else
                 throw new JsonParseException("Cannot define update type");
-        }
         return resultUpdateResponseDto;
     }
 }

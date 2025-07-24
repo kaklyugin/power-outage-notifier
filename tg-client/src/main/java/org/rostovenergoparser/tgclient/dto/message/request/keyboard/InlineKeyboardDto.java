@@ -1,7 +1,6 @@
 package org.rostovenergoparser.tgclient.dto.message.request.keyboard;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class InlineKeyboardDto {
     private List<List<InlineKeyboardButtonDto>> inlineKeyboard = new ArrayList<>();
 
     InlineKeyboardDto(KeyboardBuilder builder) {
-        this.inlineKeyboard = builder.inlineKeyboard
+        this.inlineKeyboard = builder.inlineKeyboard;
     }
 
     public static class KeyboardBuilder {
@@ -27,6 +26,21 @@ public class InlineKeyboardDto {
             this.inlineKeyboard.add(buttons);
             return this;
         }
+
+        public KeyboardBuilder addRow() {
+            List<InlineKeyboardButtonDto> row = new ArrayList<>();
+            this.inlineKeyboard.add(row);
+            return this;
+        }
+
+
+        public KeyboardBuilder addButton(String text, String callbackData) {
+            List<InlineKeyboardButtonDto> lastRow = inlineKeyboard.getLast();
+            InlineKeyboardButtonDto button = new InlineKeyboardButtonDto(text, callbackData);
+            lastRow.add(button);
+            return this;
+        }
+
 
 
         public InlineKeyboardDto build()

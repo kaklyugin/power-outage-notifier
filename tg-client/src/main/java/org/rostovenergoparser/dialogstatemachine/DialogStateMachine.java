@@ -10,16 +10,15 @@ import org.rostovenergoparser.dialogstatemachine.handlers.StreetInputUpdateHandl
 import org.rostovenergoparser.dto.UpdateDto;
 import org.rostovenergoparser.tgclient.dto.updates.UpdateType;
 
+@Getter
 public class DialogStateMachine {
 
-    @Getter
     private final DialogStateMachineContext context;
 
     public DialogStateMachine(UpdateDto update) {
         this.context = new DialogStateMachineContext();
         this.context.setChatId(update.getChatId());
         this.context.setDialogStatus(DialogStatus.NEW);
-        this.context.setLastUpdate(update);
     }
 
     public DialogStateMachine(DialogStateMachineContext context) {
@@ -39,12 +38,12 @@ public class DialogStateMachine {
         switch (update.getUserResponse()) {
             case "/start" -> {
                 var handler = new StartMessageHandler();
-                handler.handleUpdate(update);
+                handler.handleUpdate(update,this);
                 this.context.setDialogStatus(DialogStatus.WAITING_FOR_CITY_INPUT);
             }
             case "/stop" -> {
                 var handler = new StopMessageHandler();
-                handler.handleUpdate(update);
+                handler.handleUpdate(update,this);
                 this.context.setDialogStatus(DialogStatus.STOPPED);
             }
         }
@@ -54,12 +53,12 @@ public class DialogStateMachine {
         switch (this.getContext().getDialogStatus()) {
             case WAITING_FOR_CITY_INPUT -> {
                 var handler = new CitySelectUpdateHandler();
-                this.context.getUserResponseCart().setCity(handler.handleUpdate(update));
+                handler.handleUpdate(update,this);
                 this.context.setDialogStatus(DialogStatus.WAITING_FOR_STREET_INPUT);
             }
             case WAITING_FOR_STREET_INPUT -> {
                 var handler = new StreetInputUpdateHandler();
-                this.context.getUserResponseCart().setStreet(handler.handleUpdate(update));
+                handler.handleUpdate(update,this);
                 this.context.setDialogStatus(DialogStatus.DONE);
             }
         }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.rostovenergoparser.tgclient.dto.message.request.MessageDto;
-import org.rostovenergoparser.tgclient.dto.message.response.SendStatusDto;
+import org.rostovenergoparser.tgclient.dto.message.response.SendMessageResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ import java.security.cert.X509Certificate;
 
 @Slf4j
 @Component
-public class HttpBotClient {
+public class HttpBotClient implements BotClient{
 
     private static final String SSL_PROTOCOL = "TLS";
     private static final String CONTENT_TYPE_HEADER = "Content-Type";
@@ -44,7 +44,8 @@ public class HttpBotClient {
     }
 
     @SneakyThrows
-    public boolean sendMessage(MessageDto message) {
+    @Override
+    public SendMessageResponseDto sendMessage(MessageDto message) {
         String jsonMessage = objectMapper.writeValueAsString(message);
         log.info("JsonMessage = {}", jsonMessage);
         var request = HttpRequest.newBuilder()
@@ -54,15 +55,15 @@ public class HttpBotClient {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            log.info("Telegram API response: {}", response.body());
-            var result = objectMapper.readValue(response.body(), SendStatusDto.class);
-            return result.isOk();
-        } catch (IOException | InterruptedException e) {
-            log.error("Failed to send message to Telegram API", e);
+            log.info("Sent message.Response body = {}", response.body());
+            return objectMapper.readValue(response.body(), SendMessageResponseDto.class);
+        } catch (Exception e) {
+            log.error("Failed to send message to Telegram", e);
         }
-        return false;
+        return null;
     }
 
+    @Override
     public String getUpdates() {
         log.info("Sending request to get updates");
         var request = HttpRequest.newBuilder()
@@ -71,13 +72,30 @@ public class HttpBotClient {
                 .build();
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            log.info("Telegram API response: {}", response.body());
+            log.info("Received update. Body = {}", response.body());
             return response.body();
         } catch (IOException | InterruptedException e) {
-            log.error("Failed to get messageUpdates from Telegram API", e);
+            log.error("Failed to get bot message updates from Telegram", e);
         }
         return null;
     }
+
+    public void clearUpdates(Long lastUpdateId) {
+        log.info("Clearing updates");
+        final long NEXT_OFFSET = lastUpdateId + 1L;
+
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(botBaseUrl + GET_UPDATES_MESSAGE_ENDPOINT + "?offset=" + NEXT_OFFSET))
+                .GET()
+                .build();
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            log.info("Received update. Body = {}", response.body());
+        } catch (IOException | InterruptedException e) {
+            log.error("Failed to get bot message updates from Telegram", e);
+        }
+    }
+
 
     private HttpClient createHttpClient() {
         try {
